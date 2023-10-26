@@ -1,3 +1,16 @@
+provider "aws" {
+  region = "us-east-1"
+
+  # Tags to apply to all AWS resources by default
+  default_tags {
+    tags = {
+      Owner = "infra-automation-team"
+      # Do not modify this infrastructure manually
+      ManagedBy = "terraform"
+    }
+  }
+}
+
 # Define local values visible within this module
 locals {
   http_port = 80
@@ -44,6 +57,41 @@ resource "aws_autoscaling_group" "example" {
     value = "${var.cluster_name}-asg"
     propagate_at_launch = true
   }
+
+  dynamic "tag" {
+    for_each = var.custom_tags
+
+    content {
+      key = tag.key
+      value = tag.value
+      propagate_at_launch = true
+    }
+  }
+}
+
+# Define a scheduled action
+resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
+  count = var.enable_auto_scaling ? 1 : 0
+
+  scheduled_action_name = "scale-out-during-business-hours"
+  min_size = 3
+  max_size = 10
+  desired_capacity = 10
+  recurrence = "0 9 * * *"
+
+  autoscaling_group_name = module.webserver_cluster.asg_name
+}
+
+resource "aws_autoscaling_schedule" "scale_in_at_night" {
+  count = var.enable_auto_scaling ? 1 : 0
+
+  scheduled_action_name = "scale-in-at-night"
+  min_size = 2
+  max_size = 10
+  desired_capacity = 2
+  recurrence = "0 17 * * *"
+
+  autoscaling_group_name = module.webserver_cluster.asg_name
 }
 
 resource "aws_lb" "example" {

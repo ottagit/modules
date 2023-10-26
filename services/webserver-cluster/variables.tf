@@ -38,3 +38,14 @@ variable "desired_capacity" {
   description = "The number of EC2 instances that should be running in the ASG"
   type = number
 }
+
+variable "custom_tags" {
+  description = "Custom tags to set on the instances in the ASG"
+  type = map(string)
+  default = {}
+}
+
+variable "enable_auto_scaling" {
+  description = "If set to true, enable auto scaling"
+  type = bool
+}
