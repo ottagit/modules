@@ -49,3 +49,15 @@ variable "enable_auto_scaling" {
   description = "If set to true, enable auto scaling"
   type = bool
 }
+
+variable "ami" {
+  description = "The AMI to run in the cluster"
+  type = string
+  default = "ami-053b0d53c279acc90"
+}
+
+variable "server_text" {
+  description = "The text returned by the web server"
+  type = string
+  default = "New server text!"
+}
