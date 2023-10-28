@@ -59,7 +59,11 @@ resource "aws_autoscaling_group" "example" {
   }
 
   dynamic "tag" {
-    for_each = var.custom_tags
+    for_each = {
+      # Filter out any key set to Name because the module already sets its
+      # own Name tag
+      for key, value in var.custom_tags: key => upper(value) if key != "Name"
+    }
 
     content {
       key = tag.key
@@ -79,7 +83,7 @@ resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
   desired_capacity = 10
   recurrence = "0 9 * * *"
 
-  autoscaling_group_name = module.webserver_cluster.asg_name
+  autoscaling_group_name = aws_autoscaling_group.example.name
 }
 
 resource "aws_autoscaling_schedule" "scale_in_at_night" {
@@ -91,7 +95,7 @@ resource "aws_autoscaling_schedule" "scale_in_at_night" {
   desired_capacity = 2
   recurrence = "0 17 * * *"
 
-  autoscaling_group_name = module.webserver_cluster.asg_name
+  autoscaling_group_name = aws_autoscaling_group.example.name
 }
 
 resource "aws_lb" "example" {
