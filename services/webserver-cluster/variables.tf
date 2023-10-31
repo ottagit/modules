@@ -59,5 +59,5 @@ variable "ami" {
 variable "server_text" {
   description = "The text returned by the web server"
   type = string
-  default = "New server text!"
+  default = "Another server text!"
 }
