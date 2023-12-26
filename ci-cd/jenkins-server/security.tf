@@ -9,11 +9,18 @@ resource "aws_security_group" "outbound-inbound-all" {
     to_port = 22
     protocol = "tcp"
   }
-  
+  # Allow inbound traffic on port 8080
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
     from_port = 8080
     to_port = 8080
+    protocol = "tcp"
+  }
+  # Allow inbound traffic on port 4444
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 4444
+    to_port = 4444
     protocol = "tcp"
   }
   
