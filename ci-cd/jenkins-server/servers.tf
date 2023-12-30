@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "assume_role" {
 # policy document to use as the assume role policy
 resource "aws_iam_role" "jenkins-instance" {
   name_prefix = var.name
-  assume_role_policy = data.aws_iam_policy_document.assume_role.JSON
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 # Define policies to attach to the Jenkins instance IAM role
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "ec2_admin_permissions" {
 # Attach EC2 admin policies to Jenkins IAM role
 resource "aws_iam_role_policy" "jenkins_instance" {
   role = aws_iam_role.jenkins-instance.id
-  policy = data.aws_iam_policy_document.ec2_admin_permissions.JSON
+  policy = data.aws_iam_policy_document.ec2_admin_permissions.json
 }
 
 # Allow the Jenkins instance to automatically assume the
