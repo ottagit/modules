@@ -18,3 +18,46 @@ resource "aws_eip_association" "jenkins-instance-eip" {
   instance_id = aws_instance.jenkins-instance.id
   allocation_id = aws_eip.instance-eip.id
 }
+
+# Define an assume role policy that dictates who is
+# allowed to assume a given IAM role
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+# Create an IAM role and pass it the JSON from the assume_role
+# policy document to use as the assume role policy
+resource "aws_iam_role" "jenkins-instance" {
+  name_prefix = var.name
+  assume_role_policy = data.aws_iam_policy_document.assume_role.JSON
+}
+
+# Define policies to attach to the Jenkins instance IAM role
+data "aws_iam_policy_document" "ec2_admin_permissions" {
+  statement {
+    effect = "Allow"
+    actions = ["ec2:*"]
+    resources = ["*"]
+  }
+}
+
+# Attach EC2 admin policies to Jenkins IAM role
+resource "aws_iam_role_policy" "jenkins_instance" {
+  role = aws_iam_role.jenkins-instance.id
+  policy = data.aws_iam_policy_document.ec2_admin_permissions.JSON
+}
+
+# Allow the Jenkins instance to automatically assume the
+# Jenkins instance IAM role
+resource "aws_iam_instance_profile" "jenkins_instance" {
+  role = aws_iam_role.jenkins-instance.name
+}
+
