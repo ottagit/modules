@@ -10,6 +10,8 @@ resource "aws_instance" "jenkins-instance" {
   }
 
   subnet_id = "${aws_subnet.ec2-subnet.id}"
+  # Attach the instance profile
+  iam_instance_profile = aws_iam_instance_profile.jenkins_instance.name
 }
 
 resource "aws_eip_association" "jenkins-instance-eip" {
