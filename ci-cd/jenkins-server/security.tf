@@ -1,7 +1,7 @@
-resource "aws_security_group" "outbound-inbound-all" {
+resource "aws_security_group" "outbound_inbound_all" {
   name = "allow-all-sg"
 
-  vpc_id = "${aws_vpc.test-env.id}"
+  vpc_id = "${aws_vpc.test_env.id}"
   # Allow all inbound traffic
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
@@ -21,6 +21,22 @@ resource "aws_security_group" "outbound-inbound-all" {
     cidr_blocks = ["0.0.0.0/0"]
     from_port = 4444
     to_port = 4444
+    protocol = "tcp"
+  }
+
+  # Allow inbound traffic on port 3000
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 3000
+    to_port = 3000
+    protocol = "tcp"
+  }
+
+  # Allow inbound traffic on port 5000
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 5000
+    to_port = 5000
     protocol = "tcp"
   }
   

@@ -1,22 +1,22 @@
 # Create an EC2 instance
-resource "aws_instance" "jenkins-instance" {
+resource "aws_instance" "jenkins_instance" {
   ami = "${var.ami_id}"
   instance_type = "t2.medium"
   key_name = "${var.ami_key_pair_name}"
-  security_groups = ["${aws_security_group.outbound-inbound-all.id}"]
+  security_groups = ["${aws_security_group.outbound_inbound_all.id}"]
 
   tags = {
     Name = "${var.ami_name}"
   }
 
-  subnet_id = "${aws_subnet.ec2-subnet.id}"
+  subnet_id = "${aws_subnet.ec2_subnet.id}"
   # Attach the instance profile
   iam_instance_profile = aws_iam_instance_profile.jenkins_instance.name
 }
 
-resource "aws_eip_association" "jenkins-instance-eip" {
-  instance_id = aws_instance.jenkins-instance.id
-  allocation_id = aws_eip.instance-eip.id
+resource "aws_eip_association" "jenkins_instance_eip" {
+  instance_id = aws_instance.jenkins_instance.id
+  allocation_id = aws_eip.instance_eip.id
 }
 
 # Define an assume role policy that dictates who is
@@ -35,29 +35,29 @@ data "aws_iam_policy_document" "assume_role" {
 
 # Create an IAM role and pass it the JSON from the assume_role
 # policy document to use as the assume role policy
-resource "aws_iam_role" "jenkins-instance" {
+resource "aws_iam_role" "jenkins_instance" {
   name_prefix = var.name
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 # Define policies to attach to the Jenkins instance IAM role
-data "aws_iam_policy_document" "ec2_admin_permissions" {
+data "aws_iam_policy_document" "ec2_s3_admin_permissions" {
   statement {
     effect = "Allow"
-    actions = ["ec2:*"]
+    actions = ["ec2:*", "s3:*",]
     resources = ["*"]
   }
 }
 
 # Attach EC2 admin policies to Jenkins IAM role
 resource "aws_iam_role_policy" "jenkins_instance" {
-  role = aws_iam_role.jenkins-instance.id
-  policy = data.aws_iam_policy_document.ec2_admin_permissions.json
+  role = aws_iam_role.jenkins_instance.id
+  policy = data.aws_iam_policy_document.ec2_s3_admin_permissions.json
 }
 
 # Allow the Jenkins instance to automatically assume the
 # Jenkins instance IAM role
 resource "aws_iam_instance_profile" "jenkins_instance" {
-  role = aws_iam_role.jenkins-instance.name
+  role = aws_iam_role.jenkins_instance.name
 }
 
