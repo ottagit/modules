@@ -9,6 +9,6 @@ resource "aws_vpc" "test_env" {
 }
 # Attach public IP to instance
 resource "aws_eip" "instance_eip" {
-  instance = "${aws_instance.jenkins-instance.id}"
+  instance = "${aws_instance.jenkins_instance.id}"
   domain = "vpc"
 }
