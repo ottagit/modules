@@ -41,18 +41,36 @@ resource "aws_iam_role" "jenkins_instance" {
 }
 
 # Define policies to attach to the Jenkins instance IAM role
-data "aws_iam_policy_document" "ec2_s3_admin_permissions" {
+data "aws_iam_policy_document" "jenkins_instance_admin_permissions" {
   statement {
     effect = "Allow"
     actions = ["ec2:*", "s3:*",]
     resources = ["*"]
+  }
+
+  statement {
+    sid = "StateLockTable"
+
+    effect = "Allow"
+    actions = [
+      "dynamodb:BatchGet*",
+      "dynamodb:DescribeStream",
+      "dynamodb:DescribeTable",
+      "dynamodb:Get*",
+      "dynamodb:Query",
+      "dynamodb:Scan",
+      "dynamodb:BatchWrite*",
+      "dynamodb:Update*",
+      "dynamodb:PutItem"
+    ]
+    resources = [ "arn:aws:dynamodb:*:*:table/${var.dynamo_db_table}" ]
   }
 }
 
 # Attach EC2 admin policies to Jenkins IAM role
 resource "aws_iam_role_policy" "jenkins_instance" {
   role = aws_iam_role.jenkins_instance.id
-  policy = data.aws_iam_policy_document.ec2_s3_admin_permissions.json
+  policy = data.aws_iam_policy_document.jenkins_instance_admin_permissions
 }
 
 # Allow the Jenkins instance to automatically assume the

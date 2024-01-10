@@ -18,3 +18,8 @@ variable "name" {
   description = "The name prefix of the Jenkins instance IAM role"
   type = string
 }
+
+variable "dynamo_db_table" {
+  description = "The Dynamo DB table that stores the state lock file"
+  type = string
+}
