@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "jenkins_instance_admin_permissions" {
       "dynamodb:Scan",
       "dynamodb:BatchWrite*",
       "dynamodb:Update*",
-      "dynamodb:PutItem"
+      "dynamodb:PutItem",
     ]
     resources = [ "arn:aws:dynamodb:*:*:table/${var.dynamo_db_table}" ]
   }
@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "jenkins_instance_admin_permissions" {
 # Attach EC2 admin policies to Jenkins IAM role
 resource "aws_iam_role_policy" "jenkins_instance" {
   role = aws_iam_role.jenkins_instance.id
-  policy = data.aws_iam_policy_document.jenkins_instance_admin_permissions
+  policy = data.aws_iam_policy_document.jenkins_instance_admin_permissions.json
 }
 
 # Allow the Jenkins instance to automatically assume the
