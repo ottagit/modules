@@ -49,21 +49,32 @@ data "aws_iam_policy_document" "jenkins_instance_admin_permissions" {
   }
 
   statement {
+    sid = S3Backend
+
+    effect = "Allow"
+    actions = [ 
+      "s3:ListBucket",
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+     ]
+
+     resources = [ 
+        "arn:aws:s3:::${var.s3_bucket_name}",
+        "arn:aws:s3:::${var.s3_bucket_name}/${var.path_to_key}",
+      ]
+  }
+  statement {
     sid = "StateLockTable"
 
     effect = "Allow"
     actions = [
-      "dynamodb:BatchGet*",
-      "dynamodb:DescribeStream",
       "dynamodb:DescribeTable",
-      "dynamodb:Get*",
-      "dynamodb:Query",
-      "dynamodb:Scan",
-      "dynamodb:BatchWrite*",
-      "dynamodb:Update*",
+      "dynamodb:GetItem*",
+      "dynamodb:DeleteItem*",
       "dynamodb:PutItem",
     ]
-    resources = [ "arn:aws:dynamodb:*:*:table/${var.dynamo_db_table}" ]
+    resources = [ "arn:aws:dynamodb:::table/${var.dynamo_db_table}" ]
   }
 }
 
