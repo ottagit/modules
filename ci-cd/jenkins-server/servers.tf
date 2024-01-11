@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "jenkins_instance_admin_permissions" {
   }
 
   statement {
-    sid = S3Backend
+    sid = "S3Backend"
 
     effect = "Allow"
     actions = [ 
