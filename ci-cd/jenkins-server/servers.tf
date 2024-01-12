@@ -44,7 +44,7 @@ resource "aws_iam_role" "jenkins_instance" {
 data "aws_iam_policy_document" "jenkins_instance_admin_permissions" {
   statement {
     effect = "Allow"
-    actions = ["ec2:*", "s3:*",]
+    actions = ["ec2:*",]
     resources = ["*"]
   }
 
@@ -74,7 +74,7 @@ data "aws_iam_policy_document" "jenkins_instance_admin_permissions" {
       "dynamodb:DeleteItem*",
       "dynamodb:PutItem",
     ]
-    resources = [ "arn:aws:dynamodb:::table/${var.dynamo_db_table}" ]
+    resources = [ "arn:aws:dynamodb:*:*:table/${var.dynamo_db_table}" ]
   }
 }
 
