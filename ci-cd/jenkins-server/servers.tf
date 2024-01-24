@@ -33,55 +33,14 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-# Create an IAM role and pass it the JSON from the assume_role
-# policy document to use as the assume role policy
-resource "aws_iam_role" "jenkins_instance" {
-  name_prefix = var.name
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
-}
+module "ci_server_role" {
+  source = "github.com/ottagit/modules//ci-cd/global/iam/roles/ci-server?ref=v0.1.6"
 
-# Define policies to attach to the Jenkins instance IAM role
-data "aws_iam_policy_document" "jenkins_instance_admin_permissions" {
-  statement {
-    effect = "Allow"
-    actions = ["ec2:*",]
-    resources = ["*"]
-  }
-
-  statement {
-    sid = "S3Backend"
-
-    effect = "Allow"
-    actions = [ 
-      "s3:ListBucket",
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject",
-     ]
-
-     resources = [ 
-        "arn:aws:s3:::${var.s3_bucket_name}",
-        "arn:aws:s3:::${var.s3_bucket_name}/${var.path_to_key}",
-      ]
-  }
-  statement {
-    sid = "StateLockTable"
-
-    effect = "Allow"
-    actions = [
-      "dynamodb:DescribeTable",
-      "dynamodb:GetItem*",
-      "dynamodb:DeleteItem*",
-      "dynamodb:PutItem",
-    ]
-    resources = [ "arn:aws:dynamodb:*:*:table/${var.dynamo_db_table}" ]
-  }
-}
-
-# Attach EC2 admin policies to Jenkins IAM role
-resource "aws_iam_role_policy" "jenkins_instance" {
-  role = aws_iam_role.jenkins_instance.id
-  policy = data.aws_iam_policy_document.jenkins_instance_admin_permissions.json
+  name = "jenkins-instance-role"
+  dynamo_db_table   = "terraone-locks"
+  s3_bucket_name    = "batoto-bitange"
+  path_to_key       = "global/s3/terraformjenkins.tfstate"
+  provider-name     = "token.actions.githubusercontent.com"
 }
 
 # Allow the Jenkins instance to automatically assume the
@@ -89,4 +48,5 @@ resource "aws_iam_role_policy" "jenkins_instance" {
 resource "aws_iam_instance_profile" "jenkins_instance" {
   role = aws_iam_role.jenkins_instance.name
 }
+
 
