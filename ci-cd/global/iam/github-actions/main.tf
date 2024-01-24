@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 # policy document to use as the assume role policy
 resource "aws_iam_role" "github_actions" {
   name_prefix        = var.name
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
 # Define policies to attach to the CI server instance IAM role
