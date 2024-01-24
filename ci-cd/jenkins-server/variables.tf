@@ -13,3 +13,8 @@ variable "ami_key_pair_name" {
   description = "The SSH public key name to associate with the Jenkins instance"
   type = string
 }
+
+variable "name" {
+  description = "The name prefix of the CI instance IAM role"
+  type = string
+}
