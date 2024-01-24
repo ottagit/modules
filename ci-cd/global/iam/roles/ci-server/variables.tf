@@ -1,5 +1,5 @@
 variable "name" {
-  description = "The name prefix of the Jenkins instance IAM role"
+  description = "The name prefix of the CI instance IAM role"
   type = string
 }
 
@@ -15,5 +15,10 @@ variable "s3_bucket_name" {
 
 variable "path_to_key" {
   description = "The path to the Terraform state key"
+  type = string
+}
+
+variable "provider-name" {
+  description = "The name of the OIDC provider"
   type = string
 }
