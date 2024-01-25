@@ -78,6 +78,14 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
     ]
     resources = ["arn:aws:dynamodb:*:*:table/${var.dynamo_db_table}"]
   }
+
+  statement {
+    sid = "GitHubOIDC"
+
+    effect    = "Allow"
+    actions   = ["iam:CreateOpenIDConnectProvider", ]
+    resources = ["arn:aws:iam:::oidc-provider/${var.provider-name}"]
+  }
 }
 
 # Attach resource admin policies to CI server IAM role

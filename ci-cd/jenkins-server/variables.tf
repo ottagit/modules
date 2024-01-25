@@ -33,8 +33,3 @@ variable "path_to_key" {
   description = "The path to the Terraform state key"
   type = string
 }
-
-variable "provider-name" {
-  description = "The name of the OIDC provider"
-  type = string
-}
