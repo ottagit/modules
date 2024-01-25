@@ -83,7 +83,12 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
     sid = "GitHubOIDC"
 
     effect    = "Allow"
-    actions   = ["iam:CreateOpenIDConnectProvider", ]
+    actions   = [
+        "iam:CreateOpenIDConnectProvider",
+        "iam:GetRole",
+        "iam:GetOpenIDConnectProvider",
+        "iam:GetRolePolicy",
+        ]
     resources = ["arn:aws:iam:::oidc-provider/${var.provider-name}"]
   }
 }
