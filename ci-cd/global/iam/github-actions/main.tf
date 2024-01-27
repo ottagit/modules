@@ -88,6 +88,7 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
         "iam:GetRole",
         "iam:GetOpenIDConnectProvider",
         "iam:GetRolePolicy",
+        "iam:ListRolePolicies",
     ]
     resources = [
       # "arn:aws:iam:::oidc-provider/${var.provider-name}",
