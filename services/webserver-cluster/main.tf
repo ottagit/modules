@@ -15,6 +15,7 @@ provider "aws" {
 locals {
   http_port = 80
   any_port = 0
+  ssh_port = 22
   any_protocol = "-1"
   tcp_protocol = "tcp"
   all_ips = ["0.0.0.0/0"]
@@ -177,7 +178,18 @@ resource "aws_security_group_rule" "allow_http_inbound_instance" {
   from_port = var.server_port
   to_port = var.server_port
   protocol = local.tcp_protocol
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks = local.all_ips
+}
+
+# Allow SSH connections
+resource "aws_security_group_rule" "ssh" {
+  type = "ingress"
+  security_group_id = aws_security_group.instance.id
+
+  from_port = local.ssh_port
+  to_port = local.ssh_port
+  protocol = local.tcp_protocol
+  cidr_blocks = local.all_ips
 }
 
 resource "aws_security_group" "alb" {
