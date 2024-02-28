@@ -4,6 +4,20 @@ variable "db_name" {
   default = null
 }
 
+variable "db_username" {
+  description = "The username of the database"
+  type = string
+  sensitive = true
+  default = null
+}
+
+variable "db_password" {
+  description = "The database of the database"
+  type = string
+  sensitive = true
+  default = null
+}
+
 variable "backup_retention_period" {
   description = "Days to retain backups. Must be > 0 to enable replication"
   type = number
