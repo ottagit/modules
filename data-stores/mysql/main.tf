@@ -7,16 +7,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-  alias = "primary"
-}
-
-provider "aws" {
-  region = "ap-south-1"
-  alias = "replica"
-}
-
 resource "aws_db_instance" "example" {
   identifier_prefix = "example-db"
   allocated_storage = 10
