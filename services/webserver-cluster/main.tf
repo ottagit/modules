@@ -7,20 +7,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-  alias = "staging"
-
-  # Tags to apply to all AWS resources by default
-  default_tags {
-    tags = {
-      Owner = "infra-automation-team"
-      # Do not modify this infrastructure manually
-      ManagedBy = "terraform"
-    }
-  }
-}
-
 # Define local values visible within this module
 locals {
   http_port = 80
