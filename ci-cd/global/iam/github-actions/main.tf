@@ -64,7 +64,8 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
 
     resources = [
       "arn:aws:s3:::${var.s3_bucket_name}",
-      "arn:aws:s3:::${var.s3_bucket_name}/${var.path_to_key}",
+      "arn:aws:s3:::${var.s3_bucket_name}/${var.path_to_web_cluster_key}",
+      "arn:aws:s3:::${var.s3_bucket_name}/${var.path_to_data_store_key}"
     ]
   }
   statement {

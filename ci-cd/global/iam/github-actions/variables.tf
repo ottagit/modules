@@ -22,8 +22,13 @@ variable "s3_bucket_name" {
   type        = string
 }
 
-variable "path_to_key" {
+variable "path_to_web_cluster_key" {
   description = "The path to the Terraform state key"
+  type        = string
+}
+
+variable "path_to_data_store_key" {
+  description = "The path to the Terraform state key for the MySQL data store"
   type        = string
 }
 
