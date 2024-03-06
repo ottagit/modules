@@ -76,14 +76,6 @@ data "aws_iam_policy_document" "ci_server_instance_admin_permissions" {
     ]
     resources = ["arn:aws:dynamodb:*:*:table/${var.dynamo_db_table}"]
   }
-
-  statement {
-    sid = "GitHubOIDC"
-
-    effect    = "Allow"
-    actions   = ["iam:CreateOpenIDConnectProvider", ]
-    resources = ["arn:aws:iam:::oidc-provider/${var.provider-name}"]
-  }
 }
 
 # Attach resource admin policies to CI server IAM role
@@ -97,5 +89,3 @@ resource "aws_iam_role_policy" "ci_server_instance" {
 resource "aws_iam_instance_profile" "jenkins_instance" {
   role = aws_iam_role.jenkins_instance.name
 }
-
-

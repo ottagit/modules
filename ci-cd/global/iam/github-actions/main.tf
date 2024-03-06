@@ -52,6 +52,22 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
   }
 
   statement {
+    sid = "ASG Management"
+
+    effect    = "Allow"
+    actions   = ["autoscaling:*", ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "ELB Management"
+
+    effect    = "Allow"
+    actions   = ["elasticloadbalancing:*", ]
+    resources = ["*"]
+  }
+
+  statement {
     sid = "S3Backend"
 
     effect = "Allow"
@@ -68,6 +84,7 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
       "arn:aws:s3:::${var.s3_bucket_name}/${var.path_to_data_store_key}"
     ]
   }
+
   statement {
     sid = "StateLockTable"
 
@@ -88,11 +105,7 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
     actions   = [
         "iam:*",
     ]
-    resources = [
-      # "arn:aws:iam:::oidc-provider/${var.provider-name}",
-      # "${aws_iam_role.github_actions.name}",
-      "*"
-    ]
+    resources = ["*"]
   }
 }
 
