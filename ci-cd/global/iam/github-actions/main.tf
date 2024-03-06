@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
   }
 
   statement {
-    sid = "ASG Management"
+    sid = "ASGManagement"
 
     effect    = "Allow"
     actions   = ["autoscaling:*", ]
@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "github_actions_admin_permissions" {
   }
 
   statement {
-    sid = "ELB Management"
+    sid = "ELBManagement"
 
     effect    = "Allow"
     actions   = ["elasticloadbalancing:*", ]
