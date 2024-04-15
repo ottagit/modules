@@ -8,7 +8,7 @@ output "cluster_arn" {
   description = "ARN of the EKS cluster"
 }
 
-output "cluster_enpoint" {
+output "cluster_endpoint" {
   value = aws_eks_cluster.cluster.endpoint
   description = "Endpoint of the EKS cluster"
 }
