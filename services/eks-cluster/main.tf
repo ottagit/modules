@@ -31,7 +31,7 @@ data "aws_vpc" "default" {
 data "aws_subnets" "default" {
   filter {
     name = "vpc-id"
-    values = [data.aws_vpc.default]
+    values = [data.aws_vpc.default.id]
   }
 }
 
@@ -84,4 +84,28 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
 resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role = aws_iam_role.node_group.name
+}
+
+# Create the managed node group
+resource "aws_eks_node_group" "nodes" {
+  cluster_name = aws_eks_cluster.cluster.name
+  node_group_name = var.name
+  node_role_arn = aws_iam_role.node_group.arn
+  subnet_ids = data.aws_subnets.default.ids
+  instance_types = var.instance_types
+
+  scaling_config {
+    min_size = var.min_size
+    max_size = var.max_size
+    desired_size = var.desired_size
+  }  
+
+  # Ensure IAM Role permissions are created before and deleted after the
+  # EKS Node Group. Otherwise EKS will not be able to properly delete EC2
+  # instances and Elastic Network Interfaces
+  depends_on = [ 
+    aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.AmazonEKSClusterPolicy,
+   ]
 }
