@@ -18,7 +18,7 @@ variable "max_size" {
   type        = number
 }
 
-variable "enable_autoscaling" {
+variable "enable_auto_scaling" {
   description = "If set to true, enable auto scaling"
   type        = bool
 }

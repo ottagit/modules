@@ -23,7 +23,7 @@ module "asg" {
 
   min_size = var.min_size
   max_size = var.max_size
-  enable_autoscaling = var.enable_auto_scaling
+  enable_auto_scaling = var.enable_auto_scaling
 
   subnet_ids = data.aws_subnets.default.ids
   target_group_arns = [aws_lb_target_group.asg.arn]
