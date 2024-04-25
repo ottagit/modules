@@ -2,12 +2,14 @@ locals {
   http_port = 80
   tcp_protocol = "tcp"
   all_ips = ["0.0.0.0/0"]
+  any_port = 0
+  any_protocol = "-1"
 }
 
 resource "aws_lb" "example" {
   name = var.alb_name
   load_balancer_type = "application"
-  subnets = data.aws_subnets.default.ids
+  subnets = var.subnet_ids
   security_groups = [aws_security_group.alb.id]
 }
 
