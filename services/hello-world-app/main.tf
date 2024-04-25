@@ -33,7 +33,7 @@ module "asg" {
 }
 
 module "alb" {
-  source = "github.com/ottagit/modules//networking/alb?ref=v0.8.1"
+  source = "github.com/ottagit/modules//networking/alb?ref=v0.8.2"
 
   alb_name = "hello-world-${var.environment}"
   subnet_ids = data.aws_subnets.default.ids
