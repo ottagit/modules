@@ -8,7 +8,7 @@ terraform {
 }
 
 module "asg" {
-  source = "github.com/ottagit/modules//cluster/asg-rolling-deploy?ref=v0.7.0"
+  source = "github.com/ottagit/modules//cluster/asg-rolling-deploy?ref=v0.7.1"
 
   cluster_name = "hello-world-${var.environment}"
   ami = var.ami
